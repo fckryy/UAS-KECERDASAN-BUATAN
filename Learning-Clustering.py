@@ -10,7 +10,6 @@ os.environ["LOKY_MAX_CPU_COUNT"] = "4"
 
 print("1. Memuat dataset pasien penyakit jantung...")
 try:
-    
     df = pd.read_csv(r"C:\Users\alfik\OneDrive\ドキュメント\AI\heart_disease_patients.csv")
     print("Dataset berhasil dimuat!")
     print(f"Jumlah pasien: {len(df)}")
@@ -28,7 +27,6 @@ print("\nInformasi dataset:")
 print(df.info())
 
 print("\n3. Pra-pemrosesan data...")
-
 fitur_numerik = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
 df_numerik = df[fitur_numerik].copy()
 
@@ -67,14 +65,12 @@ plt.show()
 
 optimal_k = 3 
 print(f"\n6. Melakukan clustering dengan K={optimal_k}...")
-
 kmeans = KMeans(n_clusters=optimal_k, random_state=42, n_init=10)
 clusters = kmeans.fit_predict(df_scaled)
 
 df['cluster'] = clusters
 
 print("\n7. Analisis hasil clustering:")
-
 print("\nDistribusi pasien per klaster:")
 print(df['cluster'].value_counts())
 
@@ -90,7 +86,6 @@ plt.grid()
 plt.show()
 
 print("\n8. Profil rata-rata setiap klaster:")
-
 if 'target' in df.columns:
     fitur_analisis = fitur_numerik + ['target']
 else:
@@ -108,7 +103,6 @@ plt.grid(axis='y')
 plt.show()
 
 print("\n9. Interpretasi klaster berdasarkan profil:")
-
 interpretasi = {
     0: "Klaster Risiko Rendah: Usia lebih muda, tekanan darah dan kolesterol normal",
     1: "Klaster Risiko Sedang: Kolesterol tinggi tapi detak jantung maksimal baik",
@@ -133,5 +127,4 @@ for klaster, desc in interpretasi.items():
 output_file = "hasil_clustering_jantung.csv"
 df.to_csv(output_file, index=False)
 print(f"\n10. Hasil analisis disimpan dalam file: {output_file}")
-
 print("\n=== ANALISIS SELESAI ===")
