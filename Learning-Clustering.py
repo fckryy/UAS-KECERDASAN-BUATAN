@@ -5,10 +5,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+os.environ["LOKY_MAX_CPU_COUNT"] = "4" 
 
 print("1. Memuat dataset pasien penyakit jantung...")
 try:
-    df = pd.read_csv("heart_disease_patients.csv")
+    
+    df = pd.read_csv(r"C:\Users\alfik\OneDrive\ドキュメント\AI\heart_disease_patients.csv")
     print("Dataset berhasil dimuat!")
     print(f"Jumlah pasien: {len(df)}")
     print(f"Fitur yang tersedia: {list(df.columns)}")
@@ -62,7 +65,7 @@ plt.xticks(k_range)
 plt.grid()
 plt.show()
 
-optimal_k = 3  
+optimal_k = 3 
 print(f"\n6. Melakukan clustering dengan K={optimal_k}...")
 
 kmeans = KMeans(n_clusters=optimal_k, random_state=42, n_init=10)
@@ -87,7 +90,12 @@ plt.grid()
 plt.show()
 
 print("\n8. Profil rata-rata setiap klaster:")
-fitur_analisis = fitur_numerik + ['target']
+
+if 'target' in df.columns:
+    fitur_analisis = fitur_numerik + ['target']
+else:
+    fitur_analisis = fitur_numerik
+
 cluster_profile = df.groupby('cluster')[fitur_analisis].mean()
 print(cluster_profile)
 
@@ -118,6 +126,9 @@ for klaster, desc in interpretasi.items():
     print(f"- ST Depression: {cluster_profile.loc[klaster, 'oldpeak']:.1f} mm")
     if 'target' in cluster_profile.columns:
         print(f"- Persentase penyakit jantung: {cluster_profile.loc[klaster, 'target']*100:.1f}%")
+    else:
+        print("- Tidak tersedia data label penyakit jantung.")
+
 
 output_file = "hasil_clustering_jantung.csv"
 df.to_csv(output_file, index=False)
