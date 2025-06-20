@@ -86,10 +86,7 @@ plt.grid()
 plt.show()
 
 print("\n8. Profil rata-rata setiap klaster:")
-if 'target' in df.columns:
-    fitur_analisis = fitur_numerik + ['target']
-else:
-    fitur_analisis = fitur_numerik
+fitur_analisis = fitur_numerik
 
 cluster_profile = df.groupby('cluster')[fitur_analisis].mean()
 print(cluster_profile)
@@ -104,7 +101,7 @@ plt.show()
 
 print("\n9. Interpretasi klaster berdasarkan profil:")
 interpretasi = {
-    0: "Klaster Risiko Rendah: Usia lebih muda, tekanan darah dan kolesterol normal",
+    0: "Klaster Risiko Rendah: Tekanan darah dan kolesterol normal",
     1: "Klaster Risiko Sedang: Kolesterol tinggi tapi detak jantung maksimal baik",
     2: "Klaster Risiko Tinggi: Tekanan darah tinggi, kolesterol tinggi, dan ST depression"
 }
@@ -118,11 +115,6 @@ for klaster, desc in interpretasi.items():
     print(f"- Kolesterol: {cluster_profile.loc[klaster, 'chol']:.1f} mg/dl")
     print(f"- Detak jantung maksimal: {cluster_profile.loc[klaster, 'thalach']:.1f} bpm")
     print(f"- ST Depression: {cluster_profile.loc[klaster, 'oldpeak']:.1f} mm")
-    if 'target' in cluster_profile.columns:
-        print(f"- Persentase penyakit jantung: {cluster_profile.loc[klaster, 'target']*100:.1f}%")
-    else:
-        print("- Tidak tersedia data label penyakit jantung.")
-
 
 output_file = "hasil_clustering_jantung.csv"
 df.to_csv(output_file, index=False)
